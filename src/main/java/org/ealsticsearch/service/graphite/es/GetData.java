@@ -17,43 +17,43 @@ import java.util.regex.Pattern;
 public class GetData {
     private StringBuffer sb = new StringBuffer();
     private String cur ="";
-    private String timestamp = Long.toString(System.currentTimeMillis() / 1000);   //Ð´ÈëÊ±¼ä´Á
+    private String timestamp = Long.toString(System.currentTimeMillis() / 1000);   //Ð´ï¿½ï¿½Ê±ï¿½ï¿½ï¿½
     public static void main(String[] args){
 //        String contents= null;
 //        contents = HttpClientUtil.httpGetData("http://10.202.34.201:9200/_cat/nodes");
 //        System.out.println(contents);
-        String eshost="http://10.202.34.203:9201/";
-        String clustername="bdp-es-tribe";
-        String host="10.202.34.202";
-        int port =2003;
-        GetData getdata = new GetData();
+//        String eshost="http://10.202.34.203:9201/";
+//        String clustername="bdp-es-tribe";
+//        String host="10.202.34.202";
+//        int port =2003;
+//        GetData getdata = new GetData();
 //        getdata.getHeapLoad(clustername, eshost);
 //        getdata.getNodeStates(clustername,eshost);
 //        getdata.write2Graphite(getdata.getNodeStates(clustername,eshost),clustername);
 //        getdata.getCount(clustername,eshost,host,port);
-        getdata.getHealth(clustername,eshost,host,port,null,null);
+//        getdata.getHealth(clustername,eshost,host,port,null,null);
     }
 
     /***
-     * »ñÈ¡¼¯ÈºÃû³ÆµÄheapºÍload
-     * @param clustername ¼¯ÈºÃû³Æ
-     * @param eshost esµØÖ·
-     * @param host carbonµØÖ·
-     * @param port carbon¶Ë¿Ú
+     * ï¿½ï¿½È¡ï¿½ï¿½Èºï¿½ï¿½ï¿½Æµï¿½heapï¿½ï¿½load
+     * @param clustername ï¿½ï¿½Èºï¿½ï¿½ï¿½ï¿½
+     * @param eshost esï¿½ï¿½Ö·
+     * @param host carbonï¿½ï¿½Ö·
+     * @param port carbonï¿½Ë¿ï¿½
      */
     public void getHeapLoad(String clustername,String eshost,String host,int port,String uname,String pwd){
-//        Gson gson = new Gson();         //¸´ÔÓJson½âÎö¹¤¾ß
+//        Gson gson = new Gson();         //ï¿½ï¿½ï¿½ï¿½Jsonï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //        gson.fromJson("", Object.class);
         if(null==clustername|| null==eshost) return;
         Write2Graphite wg = new Write2Graphite(host,port);
         String api ="_cat/nodes";
         String contents = getESContents(eshost,api,uname,pwd);
 //        System.out.println(contents);
-        String[] rows = contents.split("\\n");  //ÇÐ·Ö½ÚµãÊý¾Ý
+        String[] rows = contents.split("\\n");  //ï¿½Ð·Ö½Úµï¿½ï¿½ï¿½ï¿½ï¿½
 //        System.out.println(rows.length);
 //        System.out.println(rows[0]+" "+rows[1]+" "+rows[2]);
         for(int i=0;i<rows.length;i++){
-            //È¥µô²»¹æÔò¿Õ¸ñ
+            //È¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¸ï¿½
             String pcolumn = rows[i].replaceAll("\\s+","|");
 //            System.out.println(pcolumn);
             String[] colums = pcolumn.trim().split("\\|");
@@ -75,11 +75,11 @@ public class GetData {
     }
 
     /**
-     * »ñÈ¡¼¯ÈºÎÄµµµÄ¸öÊý
-     * @param clustername ¼¯ÈºÃû³Æ
-     * @param eshost ¼¯ÈºIp
-     * @param host carbonµÄip
-     * @param port carbon¶Ë¿Ú
+     * ï¿½ï¿½È¡ï¿½ï¿½Èºï¿½Äµï¿½ï¿½Ä¸ï¿½ï¿½ï¿½
+     * @param clustername ï¿½ï¿½Èºï¿½ï¿½ï¿½ï¿½
+     * @param eshost ï¿½ï¿½ÈºIp
+     * @param host carbonï¿½ï¿½ip
+     * @param port carbonï¿½Ë¿ï¿½
      */
     public void getCount(String clustername,String eshost,String host,int port,String uname,String pwd){
         if(null==clustername|| null==eshost) return;
@@ -95,7 +95,7 @@ public class GetData {
     }
 
     /***
-     * ½âÎö¼¯ÈºHealth×´Ì¬
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÈºHealth×´Ì¬
      * @param clustername
      * @param eshost
      * @param host
@@ -125,9 +125,9 @@ public class GetData {
         wg.sendToGraphite(frontname+"health_percent",colums[13].replace("%",""));
     }
     /**
-     * »ñÈ¡¼¯ÈºÃ¿¸ö½ÚµãµÄÐÅÏ¢¼¯ÈºÖÐÃ¿¸ö½ÚµãµÄÐÅÏ¢
-     * @param clustername ¼¯ÈºÃû³Æ
-     * @param eshost  ¼¯ÈºµØÖ·
+     * ï¿½ï¿½È¡ï¿½ï¿½ÈºÃ¿ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½Èºï¿½ï¿½Ã¿ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½Ï¢
+     * @param clustername ï¿½ï¿½Èºï¿½ï¿½ï¿½ï¿½
+     * @param eshost  ï¿½ï¿½Èºï¿½ï¿½Ö·
      * @return
      */
 public   List<Nodes> getNodeStates(String clustername,String eshost,String uname,String pwd){
@@ -137,14 +137,14 @@ public   List<Nodes> getNodeStates(String clustername,String eshost,String uname
     JSONObject jsonContent =null;
 //    String contents = HttpClientUtil.httpGetData(queryString);
     String contents=getESContents(eshost,api,uname,pwd);
-    System.out.println("GetÇëÇó·µ»Ø×Ö·û´®³¤¶È£º" + contents.length());
-//    System.out.println("·µ»Ø½á¹û:"+contents);
+    System.out.println("Getï¿½ï¿½ï¿½ó·µ»ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½" + contents.length());
+//    System.out.println("ï¿½ï¿½ï¿½Ø½ï¿½ï¿½:"+contents);
     jsonContent = JSON.parseObject(contents);
-//    System.out.println("json×ª»»½á¹û:"+jsonContent.toJSONString());
+//    System.out.println("json×ªï¿½ï¿½ï¿½ï¿½ï¿½:"+jsonContent.toJSONString());
     JSONObject nodes = jsonContent.getJSONObject("nodes");
-//    System.out.println("nodes½á¹û:" + nodes.toJSONString());
+//    System.out.println("nodesï¿½ï¿½ï¿½:" + nodes.toJSONString());
     Set<String> set =nodes.keySet();
-    System.out.println("nodes¸öÊý:" + set.size());
+    System.out.println("nodesï¿½ï¿½ï¿½ï¿½:" + set.size());
     Iterator<String> it = set.iterator();
 //    json2keyvalue(nodes);
     while (it.hasNext()){
@@ -199,7 +199,7 @@ public   List<Nodes> getNodeStates(String clustername,String eshost,String uname
 }
 
     /**
-     *½«¸Ã¼¯Èº½ÚµãµÄÊý¾ÝÐ´Èëµ½Graphite
+     *ï¿½ï¿½ï¿½Ã¼ï¿½Èºï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ëµ½Graphite
      * @param list
      * @param clusterName
      */
@@ -208,11 +208,11 @@ public   List<Nodes> getNodeStates(String clustername,String eshost,String uname
         Write2Graphite wg = new Write2Graphite(host,port);
         for(int i=0;i<list.size();i++){
             Nodes item = list.get(i);
-            //¹¹ÔìÃ¿¸ö½ÚµãGraphiteÇ°×º
+            //ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½Úµï¿½GraphiteÇ°×º
             String frontName =clusterName+"."+item.getHost().replaceAll("\\.","_")+"."+item.getName();
             System.out.println(frontName);
 //            wg.sendToGraphite(frontName + ".indices.docs.deleted", item.);
-            //¿ªÊ¼Ð´ÈëES¼¯Èº¼à¿ØÐÅÏ¢
+            //ï¿½ï¿½Ê¼Ð´ï¿½ï¿½ESï¿½ï¿½Èºï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
             wg.sendToGraphite(frontName+".process.cpu.percent",item.getProcess().getCpu().getPercent());
             wg.sendToGraphite(frontName+".indices.docs.count",item.getIndices().getDocs().getCount());
             wg.sendToGraphite(frontName+".indices.docs.deleted",item.getIndices().getDocs().getDeleted());
@@ -229,7 +229,7 @@ public   List<Nodes> getNodeStates(String clustername,String eshost,String uname
             wg.sendToGraphite(frontName + ".indices.translog.size_in_bytes", parseUnit(item.getIndices().getTranslog().getSize_in_bytes(), "mb"));
             wg.sendToGraphite(frontName + ".os.load_average", item.getOs().getLoad_average());
             wg.sendToGraphite(frontName + ".os.mem.total_in_bytes", parseUnit(item.getOs().getMem().getTotal_in_bytes(), "gb"));
-//            System.out.println("ÏµÍ³ÄÚ´æÎª£º"+parseUnit(item.getOs().getMem().getTotal_in_bytes(), "gb"));
+//            System.out.println("ÏµÍ³ï¿½Ú´ï¿½Îªï¿½ï¿½"+parseUnit(item.getOs().getMem().getTotal_in_bytes(), "gb"));
             wg.sendToGraphite(frontName + ".os.mem.used_percent",item.getOs().getMem().getUsed_percent());
             wg.sendToGraphite(frontName + ".jvm.mem.heap_used_in_bytes",parseUnit(item.getJvm().getMem().getHeap_used_in_bytes(), "gb"));
             wg.sendToGraphite(frontName + ".jvm.mem.heap_used_percent",item.getJvm().getMem().getHeap_used_percent());
@@ -271,7 +271,7 @@ public   List<Nodes> getNodeStates(String clustername,String eshost,String uname
     }
 
     /**
-     * ¸ù¾ÝÊäÈë½«ÊäÈëµÄÕûÐÎµ¥Î»×ª»¯ÎªmbºÍgb
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë½«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îµï¿½Î»×ªï¿½ï¿½Îªmbï¿½ï¿½gb
      * @param data
      * @param unit
      * @return
@@ -292,7 +292,7 @@ public   List<Nodes> getNodeStates(String clustername,String eshost,String uname
             return "0";
     }
     /**
-     * ±éÀúÉú³ÉËùÓÐµÄÊôÐÔ£¬Î´²âÊÔÍ¨¹ý
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½Ô£ï¿½Î´ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½
      * @param obj
      */
     public  void json2keyvalue(Object obj){
@@ -320,18 +320,18 @@ public   List<Nodes> getNodeStates(String clustername,String eshost,String uname
     }
 
     /**
-     * Í¨¹ýHttp Rest api»ñÈ¡ES¼¯Èº×´Ì¬ÐÅÏ¢
-     * @param eshost ¼¯Èº¼à¿ØµØÖ·
-     * @param api   ·ÃÎÊESµÄapi£¬ÀýÈç£º_cat/health,_nodes/statsµÈ
-     * @param user ¼ÓÃÜ·ÃÎÊµÄÓÃ»§Ãû
-     * @param pwd ¼ÓÃÜ·ÃÎÊµÄÃÜÂë
-     * @return ·µ»ØES¼¯Èº×´Ì¬ÐÅÏ¢´®
+     * Í¨ï¿½ï¿½Http Rest apiï¿½ï¿½È¡ESï¿½ï¿½Èº×´Ì¬ï¿½ï¿½Ï¢
+     * @param eshost ï¿½ï¿½Èºï¿½ï¿½Øµï¿½Ö·
+     * @param api   ï¿½ï¿½ï¿½ï¿½ESï¿½ï¿½apiï¿½ï¿½ï¿½ï¿½ï¿½ç£º_cat/health,_nodes/statsï¿½ï¿½
+     * @param user ï¿½ï¿½ï¿½Ü·ï¿½ï¿½Êµï¿½ï¿½Ã»ï¿½ï¿½ï¿½
+     * @param pwd ï¿½ï¿½ï¿½Ü·ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½ï¿½
+     * @return ï¿½ï¿½ï¿½ï¿½ESï¿½ï¿½Èº×´Ì¬ï¿½ï¿½Ï¢ï¿½ï¿½
      */
     private String getESContents(String eshost,String api,String user,String pwd){
         String result=null;
         if ( null==eshost ||null==api) return null;
-        //url : https://10.110.77.48:9200/
-        String query=eshost+api;        //¹¹ÔìES²éÑ¯api½Å±¾
+
+        String query=eshost+api;        //ï¿½ï¿½ï¿½ï¿½ESï¿½ï¿½Ñ¯apiï¿½Å±ï¿½
 if(eshost.startsWith("https")) {
     result = HttpClientUtil.httpsGetrequest(query, user, pwd);
 //    System.out.println(result);
